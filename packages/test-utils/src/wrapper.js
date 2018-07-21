@@ -20,7 +20,6 @@ import ErrorWrapper from './error-wrapper'
 import { throwError, warn } from 'shared/util'
 import findAll from './find'
 import createWrapper from './create-wrapper'
-import { orderWatchers } from './order-watchers'
 
 export default class Wrapper implements BaseWrapper {
   +vnode: VNode | null;
@@ -685,7 +684,6 @@ export default class Wrapper implements BaseWrapper {
     // $FlowIgnore : Problem with possibly null this.vm
     this.vm.$forceUpdate()
     // $FlowIgnore : Problem with possibly null this.vm
-    orderWatchers(this.vm || this.vnode.context.$root)
     Vue.config.silent = originalConfig
   }
 
@@ -908,9 +906,6 @@ export default class Wrapper implements BaseWrapper {
     }
 
     this.element.dispatchEvent(eventObject)
-    if (this.vnode) {
-      orderWatchers(this.vm || this.vnode.context.$root)
-    }
   }
 
   update (): void {

@@ -28,7 +28,6 @@ export function mergeOptions (options: Options, config: Config): Options {
     stubs: getOption(options.stubs, config.stubs),
     mocks,
     methods,
-    provide,
-    sync: !!(options.sync || options.sync === undefined)
+    provide
   }
 }

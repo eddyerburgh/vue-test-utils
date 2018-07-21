@@ -15,6 +15,7 @@ import warnIfNoWindow from './warn-if-no-window'
 
 Vue.config.productionTip = false
 Vue.config.devtools = false
+Vue.config.async = false
 
 export default function mount (
   component: Component,
@@ -56,8 +57,7 @@ export default function mount (
   Vue.config.errorHandler = existingErrorHandler
 
   const wrapperOptions = {
-    attachedToDocument: !!mergedOptions.attachToDocument,
-    sync: mergedOptions.sync
+    attachedToDocument: !!mergedOptions.attachToDocument
   }
 
   return new VueWrapper(vm, wrapperOptions)

@@ -55,7 +55,7 @@ export default function mount (
     ? vm._vnode
     : vm
 
-  component._Ctor = []
+  component._Ctor = {}
 
   return createWrapper(root, wrapperOptions)
 }

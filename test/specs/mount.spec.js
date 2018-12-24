@@ -161,49 +161,6 @@ describeRunIf(process.env.TEST_ENV !== 'node', 'mount', () => {
     expect(wrapper.html()).to.equal(`<div>foo</div>`)
   })
 
-  itDoNotRunIf(
-    vueVersion < 2.3,
-    'overrides methods', () => {
-      const stub = sinon.stub()
-      const TestComponent = Vue.extend({
-        template: '<div />',
-        methods: {
-          callStub () {
-            stub()
-          }
-        }
-      })
-      mount(TestComponent, {
-        methods: {
-          callStub () {}
-        }
-      }).vm.callStub()
-
-      expect(stub).not.called
-    })
-
-  it.skip('overrides component prototype', () => {
-    const mountSpy = sinon.spy()
-    const destroySpy = sinon.spy()
-    const Component = Vue.extend({})
-    const { $mount: originalMount, $destroy: originalDestroy } = Component.prototype
-    Component.prototype.$mount = function (...args) {
-      originalMount.apply(this, args)
-      mountSpy()
-      return this
-    }
-    Component.prototype.$destroy = function () {
-      originalDestroy.apply(this)
-      destroySpy()
-    }
-
-    const wrapper = mount(Component)
-    expect(mountSpy).called
-    expect(destroySpy).not.called
-    wrapper.destroy()
-    expect(destroySpy).called
-  })
-
   // Problems accessing options of twice extended components in Vue < 2.3
   itDoNotRunIf(vueVersion < 2.3, 'compiles extended components', () => {
     const TestComponent = Vue.component('test-component', {
@@ -232,12 +189,12 @@ describeRunIf(process.env.TEST_ENV !== 'node', 'mount', () => {
   it('deletes mounting options before passing options to component', () => {
     const wrapper = mount(
       {
-        render: h => h('div')
-      },
-      {
+        render: h => h('div'),
         provide: {
           prop: 'val'
-        },
+        }
+      },
+      {
         attachToDocument: 'attachToDocument',
         mocks: {
           prop: 'val'
@@ -371,32 +328,6 @@ describeRunIf(process.env.TEST_ENV !== 'node', 'mount', () => {
       expect(wrapper.vm.$attrs).to.eql({ height: '50px', extra: 'attr' })
     }
     expect(wrapper.html()).to.equal(`<div height="50px" extra="attr"><p class="prop-1">prop1</p> <p class="prop-2"></p></div>`)
-  })
-
-  it('overwrites the component options with the instance options', () => {
-    const Component = {
-      template: '<div>{{ foo() }}{{ bar() }}{{ baz() }}</div>',
-      methods: {
-        foo () {
-          return 'a'
-        },
-        bar () {
-          return 'b'
-        }
-      }
-    }
-    const options = {
-      methods: {
-        bar () {
-          return 'B'
-        },
-        baz () {
-          return 'C'
-        }
-      }
-    }
-    const wrapper = mount(Component, options)
-    expect(wrapper.text()).to.equal('aBC')
   })
 
   it('handles inline components', () => {

@@ -680,6 +680,7 @@ export default class Wrapper implements BaseWrapper {
         `instance`
       )
     }
+    this.vm.$options.methods = Object.create(this.vm.$options.methods)
     Object.keys(methods).forEach(key => {
       // $FlowIgnore : Problem with possibly null this.vm
       this.vm[key] = methods[key]
